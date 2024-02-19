@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuestionController!{% endblock %}
+
+{% block body %}
+<style>
+    .Question{
+        border-radius: 10px;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, .25);
+        margin-bottom: 40;
+        margin-top: 40px;
+        padding: 40px;
+    }
+    img{
+        border-radius: 10px;
+    }
+</style>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mt-5 text-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <h1> ALL Questions</h1>
+    <div style="width: 100%;display: flex;flex-direction: row">
+        {% for Question in Questions %}
+            <section class="Question mr-3" style="margin: 0px;padding: 0 20px;width: 40%">
+                <article style="    width: 100%;
+    display: block;
+    justify-content: center;
+    text-align: center;margin: 0 !important;padding: 15px" class="mb-3">
+                    <div style="display: flex;" class="mb-2">
+
+                            <img src="{{ asset('images/users/') }}{{ Question.author.imageName }}" width="60px"
+                            height="60px" style="width:15%;margin-right: 30px" class="bg-info rounded-circle">
+
+                        <h6 class="mt-2"> {{ Question.author.FirstName }} {{ Question.author.LastName }}</h6>
+                    </div>
+
+                    <div class="metadat mb-1">
+                        <span class="badge badge-info">{{ Question.Title }}</span>
+                        {{ Question.CreatedAt | date('Y-m-d') }} at   {{ Question.CreatedAt | date('H:i') }}
+
+                        <span class="badge bg-success">{{ Question.Subject.Title }}</span>
+                        <span class="badge badge-primary ml-2">{{ Question.Answers | length  }} {{ (Question.Answers | length <= 1) ? 'Answer' : 'Answers' }}</span>
+                    </div>
+                    <div  style="width: 100%;">
+                        <img src="{{ asset('images/questions/') }}{{ Question.imageName }}" class="card-img-top" alt="Sunset Over the Sea" style="width: 200px;
+    height: 250px;"/>
+                        <div class="card-body">
+                            <p class="card-text">{{ Question.Content | split(' ')[0] }}....</p>
+                            <a href="{{ path('question_show', {'id' : Question.id}) }}">Read More</a>
+                        </div>
+                    </div>
+
+                </article>
+            </section>
+        {% endfor %}
+    </div>
+
+    <div class="navigation mt-2">
+        {{ knp_pagination_render(Questions) }}
+    </div>
+{% endblock %}
